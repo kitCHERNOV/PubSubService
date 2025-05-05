@@ -20,6 +20,7 @@ gRPC-сервис PubSub
 
 
 Структура проекта
+```
 .
 ├── pb/
 │   ├── pubsub.proto      # Описание gRPC API
@@ -29,6 +30,7 @@ gRPC-сервис PubSub
 ├── pubsub_service.go     # Основной файл сервиса gRPC
 ├── config.yaml           # Конфигурация сервиса
 └── README.md             # Документация
+```
 Компоненты
 Шина событий subpub
 Основная шина событий, обеспечивающая обмен сообщениями между издателями и подписчиками. Основные характеристики:
@@ -74,15 +76,21 @@ Protocol Buffers компилятор
 gRPC инструменты для Go
 
 Генерация gRPC кода
-bashprotoc --go_out=. --go_opt=paths=source_relative \
+```
+protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     pb/pubsub.proto
+```
 Сборка
+```
 bash: go build -o pubsub_service
 docker: docker build -t pubsub-service .
+```
 Запуск
+```
 bash: ./pubsub_service
 docker: docker run -p 50051:50051 pubsub-service
+```
 Конфигурация
 Сервис настраивается через файл config.yaml:
 yamlport: 50051                 # Порт для gRPC сервера
