@@ -84,31 +84,29 @@ protoc --go_out=. --go_opt=paths=source_relative \
 ### Сборка
 ```
 bash: go build -o pubsub_service
-docker: docker build -t pubsub-service .
 ```
 ### Запуск
 ```
 bash: ./pubsub_service
-docker: docker run -p 50051:50051 pubsub-service
 ```
 Конфигурация
 Сервис настраивается через файл config.yaml:
-yamlport: 50051                 # Порт для gRPC сервера
-log_file: "pubsub.log"          # Файл для логов
-log_to_console: true            # Вывод логов в консоль
+port: 8080                  # Порт для gRPC сервера
+log_to_console: true        # Вывод логов в консоль, на случай выбора между возможными вариантами.
 
 ### Пример использования (клиентский код)
-Подписка на события
+#### Создание клиента
 ```
-// Создание клиента
-conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+conn, err := grpc.NewClient("localhost:8080", grpc.WithInsecure())
 client := pb.NewPubSubClient(conn)
-
-// Подписка на события
+```
+#### Подписка на события
+```
 req := &pb.SubscribeRequest{Key: "my-topic"}
 stream, err := client.Subscribe(context.Background(), req)
-
-// Получение событий
+```
+#### Получение событий
+``` 
 for {
     event, err := stream.Recv()
     if err != nil {
@@ -116,12 +114,14 @@ for {
     }
     fmt.Printf("Received: %s\n", event.Data)
 }
-Публикация событий
-go// Создание клиента
-conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+```
+#### Создание клиента
+```
+conn, err := grpc.NewClient("localhost:8080", grpc.WithInsecure())
 client := pb.NewPubSubClient(conn)
-
-// Публикация события
+```
+#### Публикация события
+```
 req := &pb.PublishRequest{
     Key: "my-topic",
     Data: "Hello, world!",

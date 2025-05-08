@@ -29,7 +29,7 @@ var (
 func main() {
 	flag.Parse()
 
-	conn, err := grpc.NewClient(*serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(*serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials())) // as default - listen port:8080
 	if err != nil {
 		log.Fatalf("Failed to connect to server: %v", err)
 	}
